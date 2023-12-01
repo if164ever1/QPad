@@ -8,5 +8,14 @@ namespace QPadBackend.Data
         public QPadDbContext(DbContextOptions<QPadDbContext> options) : base(options) { }
 
         public DbSet<Note> Notes { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Note>()
+                .HasOne(n => n.User)
+                .WithMany(u => u.Notes)
+                .HasForeignKey(u => u.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }
